@@ -14,6 +14,14 @@ void setup() {
 }
 
 void loop() {
+
+  if(digitalRead(botao) == HIGH){
+    delay(10);
+    if(digitalRead(botao) == HIGH){
+      parada = true;
+    }
+  }
+
   digitalWrite(ledVerde, HIGH);
   delay(2000);
   digitalWrite(ledVerde, LOW);
@@ -23,13 +31,6 @@ void loop() {
   digitalWrite(ledVermelho, HIGH);
   delay(3000);
   digitalWrite(ledVermelho, LOW);
-
-  if(digitalRead(botao) == HIGH){
-    delay(10);
-    if(digitalRead(botao) == HIGH){
-      parada = true;
-    }
-  }
 
   if(parada){
     parada = false;

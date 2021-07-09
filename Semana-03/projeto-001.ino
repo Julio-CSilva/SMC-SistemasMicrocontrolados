@@ -22,8 +22,6 @@ void main(void) {
     
     TRISD = 0; //Configurar todos os pinos da PORTD - PD0 até PD7 como saída
     
-    TRISBbits.RB0 = 1; //Config. o pino RB0 para ser entrada (BOTAO SW1)
-    
     while(1){
         PORTD = 0b00010101;
     }

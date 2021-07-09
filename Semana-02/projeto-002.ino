@@ -14,7 +14,6 @@ void setup() {
 }
 
 void loop() {
-
   if(digitalRead(botao) == HIGH){
     delay(10);
     if(digitalRead(botao) == HIGH){

@@ -1,31 +1,9 @@
+#include <xc.h> //ARQUIVO .READER COM AS CONFIGURAÇÕES DO uC
 
-#pragma config FOSC = INTIO67   // Oscilador
-#pragma config BOREN = OFF      // Resetar o microcontrolador quando houver queda de tens�o.
-#pragma config PBADEN = OFF     // Desligando conversor AC/DC de PORTB
+#pragma config FOSC = INTIO67 //OSCILADOR INTERNO
+#pragma config PBADEN = OFF //DESATIVANDO CONVERSOR ANALOGICO/DIGITAL
 
-#include <xc.h>
-#define _XTAL_FREQ 1000000
-
-void main(void) {
-    TRISD = 0;
-    PORTD = 0;
-    
-    // Cofigura��o para entrada de RB0 com interrupcao
-    TRISB = 0b00000001;        // Configurar o bit RB0 como entrada.
-    
-    INTCONbits.INT0IE = 1;      // Habilitar interrup��o externa INT0
-    INTCONbits.INT0IF = 0;      // Limpar flag da interrup��o INT0
-    INTCON2bits.INTEDG0 = 0;	// Habilitar interrup��o INT0 na borda de descida
-    RCONbits.IPEN = 0;          // Desligar todas as prioridades na interrup��o.
-    
-    OSCCONbits.IRCF = 0b011; // Oscilador interno 4MHz
-    
-    while(1) {
-        
-    }
-    
-    return;
-}
+#define _XTAL_FREQ 1000000 //SETTANDO FREQUENCIA 1MHz
 
 void __interrupt() parada(){
     
@@ -44,16 +22,35 @@ void __interrupt() parada(){
             __delay_ms(100);
         }
         
-        PORTD = 0b00010000;
+        PORTD = 0b00001000;
         
         while(1){
             PORTD = PORTD << 1;
                 
             if (PORTD == 0b00000000) {
-                PORTD = 0b01000000;
+                PORTD = 0b00010000;
             }
                 
             __delay_ms(600);
         }
     }
+}
+
+void main(void) {
+    OSCCONbits.IRCF = 0b011; //SELECIONANDO A CHAVE DE 1MHz
+    
+    TRISD = 0; //CONFIGURANDO AS PORTAS D COMO SAIDA
+    TRISBbits.RB0 = 1; //CONFIGURANDO A PORTA RB0(BOTAO: SW0) COMO ENTRADA
+    
+    INTCONbits.INT0IE = 1; //ATIVANDO INTERRUPÇÃO EXTERNA
+    INTCONbits.INT0IF = 0; //LIMPANDO A FLAG DE INTERRUPÇÕES
+    INTCON2bits.INTEDG0 = 0; //HABILITANDO INTERRUPÇÕES POR BORDA DE DESCIDA
+    RCONbits.IPEN = 0; //DESLIGANDO PRIORIDADES NA INTERRUPÇÃO
+    INTCONbits.GIE = 1; //HABILITANDO INTERRUPÇÃO GERAL
+    
+    while(1){
+        PORTD = 0;
+    }
+    
+    return;
 }
